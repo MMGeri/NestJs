@@ -1,47 +1,33 @@
-import { Controller, Get } from '@nestjs/common';
-import { AppService } from './app.service';
-// import {Request} from 'express';
+import { Controller, Get,  HttpCode } from '@nestjs/common';
+import { DatabaseService } from './other/services/database/database.service';
+import { Question } from './other/interfaces/question.interface';
+import { Header } from '@nestjs/common';
 // import { Param } from '@nestjs/common';
 
 @Controller('/')  //nest g controller smth
 export class AppController {
-  constructor(private readonly appService: AppService) {}
+  constructor(private readonly db: DatabaseService) {}
   
   
   @Get()
-  // @Redirect(url,statuscode)
-  getHello(): string {
-    //todo return all questions and answers
-    //todo check for filters in query
-    return this.appService.getHello(); 
+  @Header('Content-type', 'application/json')
+  async getQuestions() {
+    //TODO: check for filters in query
+    let questions:Question[] = await this.db.getQuestions();
+    return questions;
+  }
+
+  @Get('*')
+  @HttpCode(404)
+  test(){
+    //throw exception?
+    return '404 Not Found';
   }
   
-  // @Get()
-  // async findAll(): Promise<any[]> {
-  //   return [];
-  // }
-  
-  // @Get()
-  // findAll(): Observable<any[]> {
-  //   return of([]);
-  // }
-  
+
+  //TODO: validate post requests with pipes?
+
 }
 
-//encoding type?
 
-//Standard
-//Using this built-in method, when a request handler returns
-//a JavaScript object or array, it will automatically be serialized to JSON. 
 
-//In order to take advantage of express typings (as in the request: Request parameter example above), install @types/express package.
-
-/*egyéb decoratorok amik hasznosak lehetnek:
-@Req()
-@Next()
-@Session()
-@Param()
-@Body()
-@Query()
-res.redirect()
-*/
