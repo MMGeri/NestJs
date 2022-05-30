@@ -9,11 +9,13 @@ export class QuestionController {
         return `This action returns a #${id} question`;
     }
 
+    //TODO: guard
     @Post()
     postAnswer(): string {
         return 'This action adds an answer';
     }
 
+    //TODO: guard
     @Post()
     likeQuestoin(): string {
         return 'This action likes a question';

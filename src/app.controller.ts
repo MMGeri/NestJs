@@ -24,9 +24,14 @@ export class AppController {
     return '404 Not Found';
   }
   
-
+  
+  //joi or class validation
+  //https://docs.nestjs.com/pipes#class-validator
+  //https://docs.nestjs.com/pipes#object-schema-validation
   //TODO: validate post requests with pipes?
 
+  //TODO: guard or jwt
+  //authorization with guards and exception filters?
 }
 
 
