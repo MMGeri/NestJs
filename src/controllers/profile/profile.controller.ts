@@ -1,11 +1,17 @@
-import { Controller, Get } from '@nestjs/common';
+import { Controller, Get, HttpException, HttpStatus } from '@nestjs/common';
+import { DatabaseService } from 'src/database/database.service';
 
 @Controller('profile')
 export class ProfileController {
 
+    constructor(private dbService: DatabaseService) {}
+
     @Get()
-    getProfile(): string {
-        return 'This action returns a user profile';
+    async getProfile() {
+        const user = await this.dbService.getUser()
+        if(user)
+            return user;
+        throw new HttpException("Unauthorized", HttpStatus.UNAUTHORIZED);
     }
     
 }
