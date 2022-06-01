@@ -14,7 +14,7 @@ export class RegisterController {
         //TODO: validate user object
         if(await this.dbService.createUser(user))
         // res.redirect('/');
-        return {url: '/', message: 'User created successfully'};
+        return 'User created successfully';
     else
     throw new HttpException('User already exists', HttpStatus.BAD_REQUEST);
 }

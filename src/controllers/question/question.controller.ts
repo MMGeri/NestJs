@@ -2,6 +2,9 @@ import { Controller, Get, Param, Post, Body } from '@nestjs/common';
 import { DatabaseService } from 'src/database/database.service';
 import { AnswerDTO } from 'src/other/DTOs/answer.dto';
 
+import {  Request, UseGuards } from '@nestjs/common';
+import { JwtAuthGuard } from 'src/auth/strategies/jwt-auth.guard';
+
 @Controller('question')
 export class QuestionController {
     constructor(private dbService:DatabaseService) {}
@@ -12,7 +15,7 @@ export class QuestionController {
         return {question: await this.dbService.getSingleQuestion(id), answers: await this.dbService.getAllAnswers(id)};
     }
 
-    //TODO: guard
+    @UseGuards(JwtAuthGuard)
     @Post('createAnswer')
     createAnswer(@Body() answer: AnswerDTO) {
         //TODO: send if question is created or not depending on validators
@@ -20,7 +23,8 @@ export class QuestionController {
         return 'Ok';
     }
 
-    //TODO: guard
+    @UseGuards(JwtAuthGuard)
+    @Post('createAnswer')
     @Post('like')
     likeAnswer(@Body('answerId')answerId: number) {
         this.dbService.likeAnswer(answerId);

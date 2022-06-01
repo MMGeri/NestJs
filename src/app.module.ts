@@ -8,7 +8,9 @@ import { LoginController } from './controllers/login/login.controller';
 import { QuestionController } from './controllers/question/question.controller';
 import { ProfileController } from './controllers/profile/profile.controller';
 import { AuthModule } from './auth/auth.module';
-import { DatabaseModule } from './database/database.module';
+import { AuthService } from './auth/auth.service';
+import { JwtService } from '@nestjs/jwt';
+
 
 @Module({
   imports: [AuthModule],
@@ -21,7 +23,7 @@ import { DatabaseModule } from './database/database.module';
   ],
   providers: [
     AppService,
-    DatabaseService
+    DatabaseService,
   ], 
 })
 export class AppModule {}
