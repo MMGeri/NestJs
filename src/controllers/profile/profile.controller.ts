@@ -9,7 +9,6 @@ export class ProfileController {
 
     @Get()
     @ApiBearerAuth()
-    @ApiHeader({ name: 'Authorization', required: true, description: 'JWT token' })
     @UseGuards(JwtAuthGuard)
     async getProfile(@Request() req) {
         return req.user;

@@ -27,7 +27,7 @@ export class AppController {
  
   //TODO: validate post requests with pipes
   //TODO: serialization
-  //TODO: fix the models
+
   //TODO: fix the swagger
 
   //TODO: kérdés létrehozásánál lehessen létrehozni uj tageket?
