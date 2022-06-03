@@ -22,10 +22,13 @@
   },
   "dependencies": {
     "@nestjs/common": "^8.0.0",
+    "@nestjs/config": "^2.1.0",
     "@nestjs/core": "^8.0.0",
     "@nestjs/jwt": "^8.0.1",
     "@nestjs/passport": "^8.2.1",
     "@nestjs/platform-express": "^8.0.0",
+    "@nestjs/swagger": "^5.2.1",
+    "@nestjs/typeorm": "^8.1.2",
     "bcrypt": "^5.0.1",
     "passport": "^0.5.3",
     "passport-jwt": "^4.0.0",
@@ -33,7 +36,10 @@
     "reflect-metadata": "^0.1.13",
     "rimraf": "^3.0.2",
     "rxjs": "^7.2.0",
-    "sqlite3": "^5.0.8"
+    "sqlite": "^4.1.1",
+    "sqlite3": "^5.0.8",
+    "swagger-ui-express": "^4.4.0",
+    "typeorm": "^0.3.6"
   },
   "devDependencies": {
     "@nestjs/cli": "^8.0.0",

@@ -1,16 +1,16 @@
-import { Controller, Get, HttpException, HttpStatus } from '@nestjs/common';
-import { DatabaseService } from 'src/database/database.service';
+import { Controller, Get } from '@nestjs/common';
 
 import {  Request, UseGuards } from '@nestjs/common';
 import { JwtAuthGuard } from 'src/auth/strategies/jwt-auth.guard';
+import { ApiBearerAuth, ApiHeader } from '@nestjs/swagger';
 
 @Controller('profile')
 export class ProfileController {
 
-    constructor(private dbService: DatabaseService) {}
-
-    @UseGuards(JwtAuthGuard)
     @Get()
+    @ApiBearerAuth()
+    @ApiHeader({ name: 'Authorization', required: true, description: 'JWT token' })
+    @UseGuards(JwtAuthGuard)
     async getProfile(@Request() req) {
         return req.user;
     }

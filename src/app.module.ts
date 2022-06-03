@@ -8,12 +8,14 @@ import { LoginController } from './controllers/login/login.controller';
 import { QuestionController } from './controllers/question/question.controller';
 import { ProfileController } from './controllers/profile/profile.controller';
 import { AuthModule } from './auth/auth.module';
-import { AuthService } from './auth/auth.service';
-import { JwtService } from '@nestjs/jwt';
+import {ConfigModule } from '@nestjs/config';
+
 
 
 @Module({
-  imports: [AuthModule],
+  imports: [AuthModule, ConfigModule.forRoot(
+    {isGlobal:true}
+  )],
   controllers: [
     AppController,
     RegisterController,
@@ -27,17 +29,3 @@ import { JwtService } from '@nestjs/jwt';
   ], 
 })
 export class AppModule {}
-
-
-
-
-//middleware-es auth guard, helyette majd guard vagy jwt
-/*implements NestModule{
-  configure(consumer: MiddlewareConsumer) {
-    consumer
-      .apply(AuthMiddleware)
-      .forRoutes({path:'q/*', method: RequestMethod.POST},{path:'/$', method: RequestMethod.POST});
-      //Kérdés és Válaszok hozzáadásának levédése csak bejelntkezett felhasználóknak
-      
-  }
-}*/

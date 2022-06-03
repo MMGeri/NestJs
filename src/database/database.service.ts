@@ -1,12 +1,11 @@
-import { Question } from 'src/other/interfaces/question.interface';
 import { QuestionDTO } from 'src/other/DTOs/question.dto';
-import { Answer } from 'src/other/interfaces/answer.interface';
 import { AnswerDTO } from 'src/other/DTOs/answer.dto';
-import { User } from 'src/other/DTOs/user.dto';
+import { UserDTO } from 'src/other/DTOs/user.dto';
 import { Injectable } from '@nestjs/common';
 
 import * as bcrypt from 'bcrypt';
-import { resolve } from 'path';
+import { ConfigService } from '@nestjs/config';
+
 
 
 
@@ -16,23 +15,33 @@ const  sqlite3 = require('sqlite3').verbose();
 @Injectable()
 export class DatabaseService {
     
+    db;
+
+    constructor(private config:ConfigService){
+        this.db = new sqlite3.Database(this.config.get('DATABASE_REL_PATH'));
+    }
+
     //by default request scope is singleton
     //if database is on a server, use of async provider is recommended (userFactory, return the connection) so we wait for database before starting the server
     //additionally global module for the DatabaseService is recommended if we have future modules that access to the database
-    db = new sqlite3.Database('database.sqlite');
+    
     
     
     createQuestion(question:QuestionDTO){
         let sql="INSERT INTO Question (authorId, questionTitle, questionBody) VALUES (?,?,?)";
-        const stmt = this.db.prepare(sql);
-
+        let stmt = this.db.prepare(sql);
+        const self = this;
         stmt.run(question.authorId,question.questionTitle,question.questionBody,function(err){
-            if(err)console.log(err)
+            console.log(this)
+            sql = `INSERT INTO QuestionCategory (questionId, categoryId) VALUES ${new Array(question.categories.length).fill(`(${this.lastID},?)`).join(',')}`;
+            stmt = self.db.prepare(sql);
+            stmt.run(question.categories);
         });
-        stmt.finalize();
+
+        
     }
     
-    async getQuestions(categories:number[]=[],searchQuery:string=""): Promise<Question[]>{
+    async getQuestions(categories:number[]=[],searchQuery:string=""): Promise<QuestionDTO[]>{
         //IDEA: create index for faster search
         let query:string;
         if(categories.length == 0)
@@ -54,12 +63,12 @@ export class DatabaseService {
         });
     }
 
-    async getSingleQuestion(questionId:number):Promise<Question>{
+    async getSingleQuestion(questionId:number):Promise<QuestionDTO>{
         const stmt = this.db.prepare('SELECT * FROM question WHERE id = ?');
-        return new Promise<Question>((resolve) => {
+        return new Promise<QuestionDTO>((resolve) => {
             stmt.get(questionId,(err,row)=>{
                 if(row != undefined){
-                    resolve(row as Question);
+                    resolve(row as QuestionDTO);
                     return;
                 }
                 resolve(null);
@@ -79,9 +88,9 @@ export class DatabaseService {
         preStmt.finalize();
     }
     
-    async getAllAnswers(questionId:number):Promise<Answer[]>{
+    async getAllAnswers(questionId:number):Promise<AnswerDTO[]>{
         const stmt = this.db.prepare('SELECT * FROM answer WHERE questionId = ?');
-        return new Promise<Answer[]>((resolve) => {
+        return new Promise<AnswerDTO[]>((resolve) => {
             stmt.all(questionId,(err,rows)=>{
                 if(err)console.log(err);
                 else resolve(rows);
@@ -99,7 +108,7 @@ export class DatabaseService {
     
     
     
-    async createUser(user:User){
+    async createUser(user:UserDTO){
         //check if user already exists, helyette lehetne email-t primary keyként kezelni és megnézni hogy dob-e kivételt a db.
         if(await this.getUser(user.email))
         return false;
@@ -120,12 +129,12 @@ export class DatabaseService {
     }
     
  
-    async getUser(email:string=""):Promise<User|null> {
+    async getUser(email:string=""):Promise<UserDTO|null> {
         const stmt = this.db.prepare('SELECT * FROM user WHERE email = ?');
-        return new Promise<User|null>((resolve) => {
+        return new Promise<UserDTO|null>((resolve) => {
             stmt.get(email,(err,row)=>{
                 if(row != undefined){
-                   resolve(row as User);
+                   resolve(row as UserDTO);
                 }
                 resolve(null);
             });}); 

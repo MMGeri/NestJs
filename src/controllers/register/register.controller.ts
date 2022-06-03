@@ -1,5 +1,5 @@
 import { Body, Controller, HttpException, Post } from '@nestjs/common';
-import { User } from 'src/other/DTOs/user.dto';
+import { UserDTO } from 'src/other/DTOs/user.dto';
 import { DatabaseService } from 'src/database/database.service';
 import { HttpStatus } from '@nestjs/common';
 
@@ -10,7 +10,7 @@ export class RegisterController {
     constructor(private readonly dbService: DatabaseService) {}
     
     @Post()
-    async register(@Body() user: User) {
+    async register(@Body() user: UserDTO) {
         //TODO: validate user object
         if(await this.dbService.createUser(user))
         // res.redirect('/');
