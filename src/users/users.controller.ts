@@ -13,21 +13,21 @@ export class UsersController {
   }
 
   @Get()
-  findAll() {
+  async findAll() {
     return this.usersService.findAll();
   }
 
   @Get(':id')
   findOne(@Param('id') id: string) {
-    return this.usersService.findOne(+id);
+    return this.usersService.findOneById(+id);
   }
 
-  @Patch(':id')
-  update(@Param('id') id: string, @Body() updateUserDto: UpdateUserDto) {
-    return this.usersService.update(+id, updateUserDto);
+  @Post('update/:id')
+  update(@Body() updateUserDto: UpdateUserDto) {
+    return this.usersService.update( updateUserDto);
   }
 
-  @Delete(':id')
+  @Post('delete/:id')
   remove(@Param('id') id: string) {
     return this.usersService.remove(+id);
   }
