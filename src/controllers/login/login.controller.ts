@@ -1,9 +1,10 @@
 import {  Controller,  Get,Body,  Post } from '@nestjs/common';
 
 import {  Request, UseGuards } from '@nestjs/common';
-import { ApiBody, ApiProperty } from '@nestjs/swagger';
+import { ApiBasicAuth, ApiBearerAuth, ApiBody, ApiOAuth2, ApiOkResponse, ApiProperty, ApiResponse } from '@nestjs/swagger';
 import { AuthService } from 'src/auth/auth.service';
 import { LocalAuthGuard } from 'src/auth/strategies/local-auth.guard';
+import { User } from 'src/entities/user/user.entity';
 
 class Credentials{
 
@@ -21,7 +22,9 @@ export class LoginController {
    
     @Post()
     @UseGuards(LocalAuthGuard) 
-    @ApiBody({type:Credentials,required:true})
+    @ApiBody({type:Credentials,required:true, description:"Requires email and password"})
+    @ApiOkResponse({description: "Logs-in, returns a JWT token and the User object"})
+    @ApiResponse({status: 401, description: 'Unauthorized'})
     async login(@Request() req) {
         return this.authService.login(req.user);
     }

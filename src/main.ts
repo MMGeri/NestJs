@@ -11,7 +11,6 @@ async function bootstrap() {
   .setTitle('GYIK API')
   .setDescription('Gyakori kérdések weboldalhoz REST API')
   .setVersion('1.0')
-  .addTag('GYIK')
   .addBearerAuth()
   .build();
 
