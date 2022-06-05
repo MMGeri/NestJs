@@ -23,7 +23,7 @@ export class LoginController {
     @Post()
     @UseGuards(LocalAuthGuard) 
     @ApiBody({type:Credentials,required:true, description:"Requires email and password"})
-    @ApiOkResponse({description: "Logs-in, returns a JWT token and the User object"})
+    @ApiOkResponse({description: "Logs-in, returns a JWT token"})
     @ApiResponse({status: 401, description: 'Unauthorized'})
     async login(@Request() req) {
         return this.authService.login(req.user);

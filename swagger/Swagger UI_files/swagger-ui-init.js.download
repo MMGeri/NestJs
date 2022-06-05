@@ -1,0 +1,573 @@
+
+window.onload = function() {
+  // Build a system
+  var url = window.location.search.match(/url=([^&]+)/);
+  if (url && url.length > 1) {
+    url = decodeURIComponent(url[1]);
+  } else {
+    url = window.location.origin;
+  }
+  var options = {
+  "swaggerDoc": {
+    "openapi": "3.0.0",
+    "paths": {
+      "/": {
+        "get": {
+          "operationId": "AppController_getAllQuestions",
+          "parameters": [
+            {
+              "name": "id",
+              "in": "query",
+              "required": true,
+              "schema": {
+                "type": "number"
+              }
+            },
+            {
+              "name": "name",
+              "in": "query",
+              "required": true,
+              "schema": {
+                "type": "string"
+              }
+            }
+          ],
+          "responses": {
+            "200": {
+              "description": "",
+              "content": {
+                "application/json": {
+                  "schema": {
+                    "type": "array",
+                    "items": {
+                      "$ref": "#/components/schemas/Question"
+                    }
+                  }
+                }
+              }
+            }
+          }
+        }
+      },
+      "/createQuestion": {
+        "post": {
+          "operationId": "AppController_createQuestion",
+          "parameters": [],
+          "requestBody": {
+            "required": true,
+            "description": "Question to create",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/CreateQuestionDto"
+                }
+              }
+            }
+          },
+          "responses": {
+            "201": {
+              "description": "",
+              "content": {
+                "application/json": {
+                  "schema": {
+                    "$ref": "#/components/schemas/Question"
+                  }
+                }
+              }
+            },
+            "401": {
+              "description": "Unauthorized"
+            }
+          },
+          "security": [
+            {
+              "bearer": []
+            }
+          ]
+        }
+      },
+      "/getCategories": {
+        "get": {
+          "operationId": "AppController_getCategories",
+          "parameters": [],
+          "responses": {
+            "200": {
+              "description": "Return all categories in the database",
+              "content": {
+                "application/json": {
+                  "schema": {
+                    "type": "array",
+                    "items": {
+                      "$ref": "#/components/schemas/CategoryDTO"
+                    }
+                  }
+                }
+              }
+            }
+          }
+        }
+      },
+      "/question/{id}": {
+        "get": {
+          "operationId": "QuestionController_getQuestion",
+          "parameters": [
+            {
+              "name": "id",
+              "required": true,
+              "in": "path",
+              "description": "Question id",
+              "schema": {
+                "type": "number"
+              }
+            }
+          ],
+          "responses": {
+            "200": {
+              "description": "",
+              "content": {
+                "application/json": {
+                  "schema": {
+                    "$ref": "#/components/schemas/Question"
+                  }
+                }
+              }
+            }
+          }
+        }
+      },
+      "/question/createAnswer": {
+        "post": {
+          "operationId": "QuestionController_createAnswer",
+          "parameters": [],
+          "requestBody": {
+            "required": true,
+            "description": "Answer to create",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/CreateAnswerDto"
+                }
+              }
+            }
+          },
+          "responses": {
+            "201": {
+              "description": "",
+              "content": {
+                "application/json": {
+                  "schema": {
+                    "$ref": "#/components/schemas/Answer"
+                  }
+                }
+              }
+            },
+            "401": {
+              "description": "Unauthorized"
+            }
+          },
+          "security": [
+            {
+              "bearer": []
+            }
+          ]
+        }
+      },
+      "/question/like": {
+        "post": {
+          "operationId": "QuestionController_likeAnswer",
+          "parameters": [],
+          "requestBody": {
+            "required": true,
+            "description": "Answer to like",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "example": {
+                    "answerId": 1
+                  }
+                }
+              }
+            }
+          },
+          "responses": {
+            "200": {
+              "description": "Answer liked"
+            },
+            "401": {
+              "description": "Unauthorized"
+            }
+          },
+          "security": [
+            {
+              "bearer": []
+            }
+          ]
+        }
+      },
+      "/question/dislike": {
+        "post": {
+          "operationId": "QuestionController_dislikeAnswer",
+          "parameters": [],
+          "requestBody": {
+            "required": true,
+            "description": "Answer to dislike",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "example": {
+                    "answerId": 1
+                  }
+                }
+              }
+            }
+          },
+          "responses": {
+            "200": {
+              "description": "Answer disliked"
+            },
+            "401": {
+              "description": "Unauthorized"
+            }
+          },
+          "security": [
+            {
+              "bearer": []
+            }
+          ]
+        }
+      },
+      "/login": {
+        "post": {
+          "operationId": "LoginController_login",
+          "parameters": [],
+          "requestBody": {
+            "required": true,
+            "description": "Requires email and password",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Credentials"
+                }
+              }
+            }
+          },
+          "responses": {
+            "200": {
+              "description": "Logs-in, returns a JWT token"
+            },
+            "401": {
+              "description": "Unauthorized"
+            }
+          }
+        }
+      },
+      "/profile": {
+        "get": {
+          "operationId": "ProfileController_getProfile",
+          "parameters": [],
+          "responses": {
+            "200": {
+              "description": ""
+            }
+          },
+          "security": [
+            {
+              "bearer": []
+            }
+          ]
+        }
+      },
+      "/register": {
+        "post": {
+          "operationId": "RegisterController_register",
+          "parameters": [],
+          "requestBody": {
+            "required": true,
+            "description": "User to create",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/CreateUserDto"
+                }
+              }
+            }
+          },
+          "responses": {
+            "201": {
+              "description": "",
+              "content": {
+                "application/json": {
+                  "schema": {
+                    "$ref": "#/components/schemas/CreateUserDto"
+                  }
+                }
+              }
+            },
+            "401": {
+              "description": "Unauthorized"
+            }
+          }
+        }
+      }
+    },
+    "info": {
+      "title": "GYIK API",
+      "description": "Gyakori kérdések weboldalhoz REST API",
+      "version": "1.0",
+      "contact": {}
+    },
+    "tags": [],
+    "servers": [],
+    "components": {
+      "securitySchemes": {
+        "bearer": {
+          "scheme": "bearer",
+          "bearerFormat": "JWT",
+          "type": "http"
+        }
+      },
+      "schemas": {
+        "Category": {
+          "type": "object",
+          "properties": {
+            "id": {
+              "type": "number"
+            },
+            "name": {
+              "type": "string"
+            }
+          },
+          "required": [
+            "id",
+            "name"
+          ]
+        },
+        "Question": {
+          "type": "object",
+          "properties": {
+            "id": {
+              "type": "number"
+            },
+            "authorId": {
+              "type": "number"
+            },
+            "questionTitle": {
+              "type": "string"
+            },
+            "questionBody": {
+              "type": "string"
+            },
+            "answers": {
+              "type": "array",
+              "items": {
+                "$ref": "#/components/schemas/Answer"
+              }
+            },
+            "categories": {
+              "type": "array",
+              "items": {
+                "$ref": "#/components/schemas/Category"
+              }
+            }
+          },
+          "required": [
+            "id",
+            "authorId",
+            "questionTitle",
+            "questionBody",
+            "answers",
+            "categories"
+          ]
+        },
+        "Answer": {
+          "type": "object",
+          "properties": {
+            "id": {
+              "type": "number"
+            },
+            "questionId": {
+              "type": "number"
+            },
+            "answerBody": {
+              "type": "string"
+            },
+            "authorId": {
+              "type": "number"
+            },
+            "likeCount": {
+              "type": "number"
+            },
+            "dislikeCount": {
+              "type": "number"
+            },
+            "question": {
+              "$ref": "#/components/schemas/Question"
+            }
+          },
+          "required": [
+            "id",
+            "questionId",
+            "answerBody",
+            "authorId",
+            "likeCount",
+            "dislikeCount",
+            "question"
+          ]
+        },
+        "CategoryDTO": {
+          "type": "object",
+          "properties": {
+            "id": {
+              "type": "number"
+            },
+            "name": {
+              "type": "string"
+            }
+          },
+          "required": [
+            "id",
+            "name"
+          ]
+        },
+        "CreateQuestionDto": {
+          "type": "object",
+          "properties": {
+            "authorId": {
+              "type": "number"
+            },
+            "questionTitle": {
+              "type": "string",
+              "minLength": 10,
+              "maxLength": 100
+            },
+            "questionBody": {
+              "type": "string",
+              "minLength": 10,
+              "maxLength": 500
+            },
+            "categories": {
+              "type": "array",
+              "items": {
+                "$ref": "#/components/schemas/CategoryDTO"
+              }
+            }
+          },
+          "required": [
+            "authorId",
+            "questionTitle",
+            "questionBody",
+            "categories"
+          ]
+        },
+        "CreateAnswerDto": {
+          "type": "object",
+          "properties": {
+            "questionId": {
+              "type": "number"
+            },
+            "answerBody": {
+              "type": "string",
+              "minLength": 10,
+              "maxLength": 500
+            },
+            "authorId": {
+              "type": "number"
+            },
+            "likeCount": {
+              "type": "number"
+            },
+            "dislikeCount": {
+              "type": "number"
+            }
+          },
+          "required": [
+            "questionId",
+            "answerBody",
+            "authorId",
+            "likeCount",
+            "dislikeCount"
+          ]
+        },
+        "Credentials": {
+          "type": "object",
+          "properties": {
+            "username": {
+              "type": "string"
+            },
+            "password": {
+              "type": "string"
+            }
+          },
+          "required": [
+            "username",
+            "password"
+          ]
+        },
+        "CreateUserDto": {
+          "type": "object",
+          "properties": {
+            "name": {
+              "type": "string"
+            },
+            "email": {
+              "type": "string"
+            },
+            "password": {
+              "type": "string",
+              "minLength": 8
+            },
+            "gender": {
+              "type": "string",
+              "enum": [
+                "f",
+                "m"
+              ]
+            }
+          },
+          "required": [
+            "name",
+            "email",
+            "password",
+            "gender"
+          ]
+        }
+      }
+    }
+  },
+  "customOptions": {},
+  "swaggerUrl": {}
+};
+  url = options.swaggerUrl || url
+  var urls = options.swaggerUrls
+  var customOptions = options.customOptions
+  var spec1 = options.swaggerDoc
+  var swaggerOptions = {
+    spec: spec1,
+    url: url,
+    urls: urls,
+    dom_id: '#swagger-ui',
+    deepLinking: true,
+    presets: [
+      SwaggerUIBundle.presets.apis,
+      SwaggerUIStandalonePreset
+    ],
+    plugins: [
+      SwaggerUIBundle.plugins.DownloadUrl
+    ],
+    layout: "StandaloneLayout"
+  }
+  for (var attrname in customOptions) {
+    swaggerOptions[attrname] = customOptions[attrname];
+  }
+  var ui = SwaggerUIBundle(swaggerOptions)
+
+  if (customOptions.oauth) {
+    ui.initOAuth(customOptions.oauth)
+  }
+
+  if (customOptions.authAction) {
+    ui.authActions.authorize(customOptions.authAction)
+  }
+
+  window.ui = ui
+}
