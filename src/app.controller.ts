@@ -1,6 +1,7 @@
-import { Body, Controller, Get, Param, Post, Query, Request, Res, UseGuards } from '@nestjs/common';
+import { Body, Controller, Get, Param, ParseArrayPipe, Post, Query, Request, Res, UseGuards } from '@nestjs/common';
 import { JwtAuthGuard } from './auth/strategies/jwt-auth.guard';
-import { Category } from './entities/category/category.entity';
+import { CategoryDTO } from './dtos/category.dto';
+import { CreateQuestionDto } from './dtos/create-question.dto';
 import { CategoryService } from './entities/category/category.service';
 import { QuestionService } from './entities/question/question.service';
 
@@ -14,12 +15,16 @@ export class AppController {
    
   
   @Get()
-  async getAllQuestions(@Query('categories') categories: Category[]) {
+  async getAllQuestions(
+    @Query('categories', new ParseArrayPipe({items: CategoryDTO}))
+     categories: CategoryDTO[]
+    ) {
       return this.questions.find(categories);
   }
-
+  
   @Post('createQuestion')
-  createQuestion(@Body() question: any) {
+  @UseGuards(JwtAuthGuard)
+  createQuestion(@Body() question: CreateQuestionDto) {
     return this.questions.create(question);
   }
 
