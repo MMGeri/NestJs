@@ -3,8 +3,8 @@
 ## Leírás
 
 - adatbázis: `sqlite`
-- backend: `express`
-- dokumentáció: `swagger`
+- backend: `express` (NestJs)
+- dokumentáció: `swagger` *is van*
 
 ## Beüzemelés
 1. klónozd le a repót <br>
