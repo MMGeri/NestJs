@@ -23,6 +23,8 @@
 
   ``` npm run start ```
   
+  localhost:3000 -en elérhetőek lesznek majd az endpointok
+  
 ## Dokumentáció, megoldások
 
 - Adatbázis az `sqlite`-ot használtam, először TypeORM nélkül de aztán át brancheltem és ez lett a final version, a másik elérhető a master branchen megtekíntésre.
