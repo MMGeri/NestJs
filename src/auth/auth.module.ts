@@ -5,13 +5,12 @@ import { LocalStrategy } from './strategies/local.strategy';
 import { JwtModule } from '@nestjs/jwt';
 import { ConfigService } from '@nestjs/config';
 import { JwtStrategy } from './strategies/jwt.strategy';
-import { UsersModule } from 'src/users/users.module';
-import { UsersService } from 'src/users/users.service';
+import { UserModule } from 'src/entities/user/user.module';
 
 @Module({
   imports: [
     PassportModule, 
-    UsersModule,
+    UserModule,
     JwtModule.registerAsync({
     useFactory: async (configService: ConfigService) => ({
       secret: configService.get('SECRET_KEY'),

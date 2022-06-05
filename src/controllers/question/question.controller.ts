@@ -1,34 +1,41 @@
 import { Controller, Get, Param, Post, Body } from '@nestjs/common';
-import { DatabaseService } from 'src/database/database.service';
-import { AnswerDTO } from 'src/other/DTOs/answer.dto';
-
-import {  Request, UseGuards } from '@nestjs/common';
+import { UseGuards } from '@nestjs/common';
 import { JwtAuthGuard } from 'src/auth/strategies/jwt-auth.guard';
+import { CreateAnswerDto } from 'src/dtos/create-answer.dto';
+
+import { AnswerService } from 'src/entities/answer/answer.service';
+import { QuestionService } from 'src/entities/question/question.service';
 
 @Controller('question')
 export class QuestionController {
-    constructor(private dbService:DatabaseService) {}
+    constructor
+    (
+        private readonly questions: QuestionService, 
+        private readonly answers: AnswerService
+    ) {}
+    
 
     @Get(':id')
     async getQuestion(@Param('id') id: number) {
-        console.log(id);
-        return {question: await this.dbService.getSingleQuestion(id), answers: await this.dbService.getAllAnswers(id)};
+        return this.questions.findOne(id);
     }
 
-    @UseGuards(JwtAuthGuard)
     @Post('createAnswer')
-    createAnswer(@Body() answer: AnswerDTO) {
-        //TODO: send if question is created or not depending on validators
-        this.dbService.createAnswer(answer);
-        return 'Ok';
+    @UseGuards(JwtAuthGuard)
+    createAnswer(@Body() answer: CreateAnswerDto) {
+        return this.answers.create(answer);
     }
 
-    @UseGuards(JwtAuthGuard)
-    @Post('createAnswer')
     @Post('like')
+    @UseGuards(JwtAuthGuard)
     likeAnswer(@Body('answerId')answerId: number) {
-        this.dbService.likeAnswer(answerId);
-        return 'Ok';
+        return this.answers.likeAnswer(answerId);
+    }
+    
+    @Post('dislike')
+    @UseGuards(JwtAuthGuard)
+    dislikeAnswer(@Body('answerId')answerId: number) {
+        return this.answers.dislikeAnswer(answerId);
     }
     
 }

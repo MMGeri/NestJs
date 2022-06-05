@@ -1,22 +1,16 @@
 import { Body, Controller, HttpException, Post } from '@nestjs/common';
-import { UserDTO } from 'src/other/DTOs/user.dto';
-import { DatabaseService } from 'src/database/database.service';
-import { HttpStatus } from '@nestjs/common';
+import { CreateUserDto } from 'src/dtos/create-user.dto';
+import { UserService } from 'src/entities/user/user.service';
 
 
 @Controller('register')
 export class RegisterController {
     
-    constructor(private readonly dbService: DatabaseService) {}
+    constructor(private readonly users: UserService) {}
     
     @Post()
-    async register(@Body() user: UserDTO) {
-        //TODO: validate user object
-        if(await this.dbService.createUser(user))
-        // res.redirect('/');
-        return 'User created successfully';
-    else
-    throw new HttpException('User already exists', HttpStatus.BAD_REQUEST);
-}
+    async register(@Body() user: CreateUserDto) {
+        return this.users.create(user);
+    }
 
 }
