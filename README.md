@@ -33,3 +33,20 @@
 - Authentikációhoz létrehoztam egy `AuthModule`-t és `AuthService`-t és két stratégiát:
   - Local: a bejelentkeztetéshez email és jelszóval
   - Jwt: tokennel való authentikáció amit a bejelentkezés után kapunk meg.
+- Swagger dokumentáció elérhető: [Swagger](https://github.com/MMGeri/NestJs/tree/TypeORM/swagger)
+
+---
+
+__Endpointok__
+- `GET '/'` -visszatér az összes kérdéssel, lehet queryt írni kategóriákra pl: `?categories[0][id]=1&categories[0][name]=Technical`
+- `GET '/getCategories'` -visszatér az összes kategóriával amik kötül választhatunk
+- `GET '/question/{id}'` -lekérünk egy kérdést és az azokhoz tartozó válaszokat
+- `GET '/profile'` -ha rendelkezünk JWT tokennel akkor megnézhetjük a profilunkat
+<br>
+
+- `POST '/createQuestion'` - létrehozunk egy kérdést
+- `POST '/question/createAnswer` - létrehozunk egy választ egy kérdésre
+- `POST '/question/like'` - növeljük egy kérdés like számát
+- `POST '/question/dislike'` - a dislike számot növeljük
+- `POST '/login'` -elküldjük a bejelentkezési adatainkat, visszakapjuk a JWT tokent
+- `POST '/register'` -elküldjük a regisztrációs adatokat, létrehoz egy felhasználót, a jelszó hash-elve lesz
