@@ -35,7 +35,7 @@
 - Authentikációhoz létrehoztam egy `AuthModule`-t és `AuthService`-t és két stratégiát:
   - Local: a bejelentkeztetéshez email és jelszóval
   - Jwt: tokennel való authentikáció amit a bejelentkezés után kapunk meg.
-  - A JWT secret key-t a .env fileban lehet átállítani
+  - A JWT secret key-t a [.env](https://github.com/MMGeri/NestJs/blob/TypeORM/.env) fileban lehet átállítani
 - Swagger dokumentáció elérhető: [Swagger](https://github.com/MMGeri/NestJs/tree/TypeORM/swagger)
 
 ---
