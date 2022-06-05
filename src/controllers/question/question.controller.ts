@@ -1,4 +1,4 @@
-import { Controller, Get, Param, Post, Body } from '@nestjs/common';
+import { Controller, Get, Param, Post, Body, ConsoleLogger, Req, HttpException } from '@nestjs/common';
 import { UseGuards } from '@nestjs/common';
 import { JwtAuthGuard } from 'src/auth/strategies/jwt-auth.guard';
 import { CreateAnswerDto } from 'src/dtos/create-answer.dto';
@@ -22,16 +22,22 @@ export class QuestionController {
 
     @Post('createAnswer')
     @UseGuards(JwtAuthGuard)
-    createAnswer(@Body() answer: CreateAnswerDto) {
-        return this.answers.create(answer);
+    createAnswer(@Body() answer: CreateAnswerDto, @Req() req) {
+        if(req.user.id == answer.authorId) 
+            return this.answers.create(answer);
+        throw new HttpException('Unauthorized', 401);
     }
+
 
     @Post('like')
     @UseGuards(JwtAuthGuard)
     likeAnswer(@Body('answerId')answerId: number) {
         return this.answers.likeAnswer(answerId);
     }
-    
+
+    //ahoz hogy egy felhasználo csak egyszer tudjun likeolni-dislikeolni elkéne tárolni a felhasználó által likeolt id-ket
+
+
     @Post('dislike')
     @UseGuards(JwtAuthGuard)
     dislikeAnswer(@Body('answerId')answerId: number) {

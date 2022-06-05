@@ -24,6 +24,7 @@ const dbOptions:SqliteConnectionOptions ={
   database: 'database.sqlite',
   entities: ['dist/**/*.entity.{js,ts}'],
   synchronize: false,
+  // logging:true
 }
 
 

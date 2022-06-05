@@ -11,23 +11,15 @@ export class AnswerService {
   constructor(@InjectRepository(Answer) private readonly answerRepository: Repository<Answer>) {}
 
   create(createAnswerDto: CreateAnswerDto) {
-    return ;
-  }
-
-  find(questionId:number=null) {
-    return `This action returns all answer`;
-  }
-
-  findOne(id: number) {
-    return `This action returns a #${id} answer`;
+    return this.answerRepository.save(createAnswerDto);
   }
 
   likeAnswer(answerId: number) {
-    return this.answerRepository.increment({id:answerId}, 'likes', 1);
+    return this.answerRepository.increment({id:answerId}, 'likeCount', 1);
   }
 
   dislikeAnswer(answerId: number) {
-    return this.answerRepository.decrement({id:answerId}, 'likes', 1);
+    return this.answerRepository.decrement({id:answerId}, 'dislikeCount', 1);
   }
   
 }
