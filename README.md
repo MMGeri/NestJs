@@ -42,14 +42,16 @@
 
 __Endpointok__
 - `GET '/'` -visszatér az összes kérdéssel, lehet queryt írni kategóriákra pl: `?categories[0][id]=1&categories[0][name]=Technical`
-- `GET '/getCategories'` -visszatér az összes kategóriával amik kötül választhatunk
-- `GET '/question/{id}'` -lekérünk egy kérdést és az azokhoz tartozó válaszokat
+- `GET '/getCategories'` -visszatér az összes kategóriával amik közül választhatunk
+- `GET '/question/{id}'` -lekérünk egy kérdést és a hozzá tartozó válaszokat
 - `GET '/profile'` -ha rendelkezünk JWT tokennel akkor megnézhetjük a profilunkat
 <br>
 
-- `POST '/createQuestion'` - létrehozunk egy kérdést
-- `POST '/question/createAnswer` - létrehozunk egy választ egy kérdésre
-- `POST '/question/like'` - növeljük egy kérdés like számát
-- `POST '/question/dislike'` - a dislike számot növeljük
+- `POST '/createQuestion'` - létrehozunk egy kérdést, JWT bearer token kell hozzá
+- `POST '/question/createAnswer` - létrehozunk egy választ egy kérdésre, JWT bearer token kell hozzá
+- `POST '/question/like'` - növeljük egy kérdés like számát, JWT bearer token kell hozzá
+- `POST '/question/dislike'` - a dislike számot növeljük, JWT bearer token kell hozzá
 - `POST '/login'` -elküldjük a bejelentkezési adatainkat, visszakapjuk a JWT tokent
 - `POST '/register'` -elküldjük a regisztrációs adatokat, létrehoz egy felhasználót, a jelszó hash-elve lesz
+
+A request body és response pédlák a [Swagger](https://github.com/MMGeri/NestJs/tree/TypeORM/swagger) dokumentációban megtalálhatóak
