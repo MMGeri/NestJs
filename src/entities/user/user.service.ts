@@ -13,7 +13,7 @@ export class UserService {
 
   constructor(@InjectRepository(User) private readonly userRepository: Repository<User>) {}
 
-  async create(createUserDto: CreateUserDto) {
+  async create(createUserDto: CreateUserDto): Promise<User> {
 
     if(await this.findOneByEmail(createUserDto.email))
     throw new HttpException('User already exists', HttpStatus.BAD_REQUEST);
@@ -30,7 +30,7 @@ export class UserService {
     return await this.userRepository.findOneBy({id:id});
   }
 
-  async findOneByEmail(email: string) {
+  async findOneByEmail(email: string): Promise<User> {
     return await this.userRepository.findOneBy({email: email});
   }
 

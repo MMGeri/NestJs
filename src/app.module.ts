@@ -16,13 +16,17 @@ import { QuestionController } from './controllers/question/question.controller';
 import { LoginController } from './controllers/login/login.controller';
 import { ProfileController } from './controllers/profile/profile.controller';
 import { RegisterController } from './controllers/register/register.controller';
-// import { QuestionCategoryModule } from './entities/question-category/question-category.module';
+
+import { User } from './entities/user/user.entity';
+import { Question } from './entities/question/question.entity';
+import { Category } from './entities/category/category.entity';
+import { Answer } from './entities/answer/answer.entity';
 
 
 const dbOptions:SqliteConnectionOptions ={
   type: 'sqlite',
   database: 'database.sqlite',
-  entities: ['dist/**/*.entity.{js,ts}'],
+  entities:[User,Question,Category,Answer],
   synchronize: false,
   // logging:true
 }

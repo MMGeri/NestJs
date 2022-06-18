@@ -1,10 +1,8 @@
-import {  Controller,  Get,Body,  Post } from '@nestjs/common';
-
+import {  Controller, Post } from '@nestjs/common';
 import {  Request, UseGuards } from '@nestjs/common';
-import { ApiBasicAuth, ApiBearerAuth, ApiBody, ApiOAuth2, ApiOkResponse, ApiProperty, ApiResponse } from '@nestjs/swagger';
+import { ApiBody, ApiOkResponse, ApiProperty, ApiResponse } from '@nestjs/swagger';
 import { AuthService } from 'src/auth/auth.service';
 import { LocalAuthGuard } from 'src/auth/strategies/local-auth.guard';
-import { User } from 'src/entities/user/user.entity';
 
 class Credentials{
 

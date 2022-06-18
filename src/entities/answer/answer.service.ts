@@ -10,7 +10,7 @@ export class AnswerService {
 
   constructor(@InjectRepository(Answer) private readonly answerRepository: Repository<Answer>) {}
 
-  create(createAnswerDto: CreateAnswerDto) {
+  create(createAnswerDto: CreateAnswerDto): Promise<Answer> {
     return this.answerRepository.save(createAnswerDto);
   }
 

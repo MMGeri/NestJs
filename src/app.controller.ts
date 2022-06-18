@@ -1,5 +1,5 @@
-import { Body, Controller, Get, Param, ParseArrayPipe, Post, Query, Request, Res, UseGuards } from '@nestjs/common';
-import { ApiBearerAuth, ApiBody, ApiCreatedResponse, ApiOkResponse, ApiParam, ApiQuery, ApiResponse } from '@nestjs/swagger';
+import { Body, Controller, Get, ParseArrayPipe, Post, Query, UseGuards } from '@nestjs/common';
+import { ApiBearerAuth, ApiBody, ApiCreatedResponse, ApiOkResponse, ApiQuery, ApiResponse } from '@nestjs/swagger';
 import { JwtAuthGuard } from './auth/strategies/jwt-auth.guard';
 import { CategoryDTO } from './dtos/category.dto';
 import { CreateQuestionDto } from './dtos/create-question.dto';
@@ -7,7 +7,7 @@ import { CategoryService } from './entities/category/category.service';
 import { Question } from './entities/question/question.entity';
 import { QuestionService } from './entities/question/question.service';
 
-@Controller('/')  //nest g controller smth
+@Controller('/questions')  
 export class AppController {
   
   constructor(
@@ -32,7 +32,7 @@ export class AppController {
       return this.questions.find(categories);
   }
 
-  @Post('createQuestion')
+  @Post()
   @UseGuards(JwtAuthGuard)
   @ApiBearerAuth()
   @ApiBody({type: CreateQuestionDto, description: 'Question to create'})
@@ -42,7 +42,7 @@ export class AppController {
     return this.questions.create(question);
   }
 
-  @Get('getCategories')
+  @Get('categories')
   @ApiOkResponse({type: [CategoryDTO], description: 'Return all categories in the database'})
   getCategories() {
     return this.categories.findAll();

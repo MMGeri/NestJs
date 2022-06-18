@@ -1,4 +1,4 @@
-import { Controller, Get, Param, Post, Body, ConsoleLogger, Req, HttpException } from '@nestjs/common';
+import { Controller, Get, Param, Post, Body, Req, HttpException } from '@nestjs/common';
 import { UseGuards } from '@nestjs/common';
 import { ApiBearerAuth, ApiBody, ApiCreatedResponse, ApiOkResponse, ApiParam, ApiResponse } from '@nestjs/swagger';
 import { JwtAuthGuard } from 'src/auth/strategies/jwt-auth.guard';
@@ -25,7 +25,7 @@ export class QuestionController {
         return this.questions.findOne(id);
     }
 
-    @Post('createAnswer')
+    @Post('answer')
     @UseGuards(JwtAuthGuard)
     @ApiBearerAuth()
     @ApiBody({type: CreateAnswerDto, description: 'Answer to create'})
@@ -48,7 +48,6 @@ export class QuestionController {
         return this.answers.likeAnswer(answerId);
     }
 
-    //ahoz hogy egy felhasználo csak egyszer tudjun likeolni-dislikeolni elkéne tárolni a felhasználó által likeolt id-ket
 
 
     @Post('dislike')

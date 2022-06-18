@@ -16,14 +16,14 @@ export class QuestionService {
     return await this.questionRepository.save(createQuestionDto);
   }
   
-  async findOne(id: number) {
+  async findOne(id: number): Promise<Question> {
     return await this.questionRepository.findOne({
       relations:{answers:true},
       where:{id:id}
     });
   }
   
-  async find(categories:CategoryDTO[]=[])  {
+  async find(categories:CategoryDTO[]=[]): Promise<Question[]>   {
     //example: 
     //http://localhost:3000/?categories[0][id]=1&categories[0][name]=Technical&categories[1][id]=3&categories[1][name]=Python
     
