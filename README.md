@@ -41,7 +41,7 @@
 ---
 
 __Endpointok__
-- `GET '/'` -visszatér az összes kérdéssel, lehet queryt írni kategóriákra pl: `?categories[0][id]=1&categories[0][name]=Technical`
+- `GET '/question'` -visszatér az összes kérdéssel, lehet queryt írni kategóriákra pl: `?categories[0][id]=1&categories[0][name]=Technical`
 - `GET '/getCategories'` -visszatér az összes kategóriával amik közül választhatunk
 - `GET '/question/{id}'` -lekérünk egy kérdést és a hozzá tartozó válaszokat
 - `GET '/profile'` -ha rendelkezünk JWT tokennel akkor megnézhetjük a profilunkat
